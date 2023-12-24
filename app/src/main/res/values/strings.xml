@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">UserApplication</string>
+    <string name="name">Name</string>
+    <string name="palindrome">Palindrome</string>
+    <string name="check">Check</string>
+    <string name="next">Next</string>
+    <string name="welcome">Welcome</string>
+    <string name="selected_user">Selected User</string>
+    <string name="choose_user">Choose a User</string>
+    <string name="first_name">Firstname</string>
+    <string name="last_name">Lastname</string>
+    <string name="email">Email@email.com</string>
+    <string name="second_screen">Second Screen</string>
+    <string name="third_screen">Third Screen</string>
+</resources>
