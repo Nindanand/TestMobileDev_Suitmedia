@@ -12,29 +12,31 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.userapplication.R
 import com.example.userapplication.databinding.ActivityFirstScreenBinding
 import com.example.userapplication.secondScreen.SecondScreen
+import java.util.Locale
 
 class FirstScreen : AppCompatActivity() {
     private lateinit var binding: ActivityFirstScreenBinding
     private var isPalindrome:Boolean = false
     private var currentImageUri: Uri? = null
-    private val viewModel by viewModels<SharedViewModel>()
+    private lateinit var viewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFirstScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
         setupView()
         nextAction()
         checkAction()
-        setupnameEditText()
-        setuppalindromeEditText()
+        setupNameEditText()
+        setupPalindromeEditText()
         binding.ivUser.setOnClickListener { startGallery() }
     }
 
@@ -69,7 +71,7 @@ class FirstScreen : AppCompatActivity() {
     private fun nextAction() {
         binding.nextButton.setOnClickListener {
             val name = binding.nameEditText.text.toString()
-            val palindrome = binding.palindromeEditText.text.toString()
+            val palindrome = binding.palindromeEditText.text.toString().toLowerCase(Locale.ROOT)
 
             if (TextUtils.isEmpty(name) || TextUtils.isEmpty(palindrome)) {
                 Toast.makeText(
@@ -79,11 +81,10 @@ class FirstScreen : AppCompatActivity() {
                 ).show()
             } else {
                 if (checkPalindrome(palindrome)) {
-                    startActivity(Intent(this, SecondScreen::class.java))
                     viewModel.setName(name)
+                    startActivity(Intent(this, SecondScreen::class.java))
                     Log.d("FirstScreen", "Name before setting in ViewModel: $name")
-                }
-                else {
+                } else {
                     Toast.makeText(
                         this@FirstScreen,
                         "Change text to palindrome!",
@@ -103,7 +104,7 @@ class FirstScreen : AppCompatActivity() {
 
     private fun checkAction() {
         binding.checkButton.setOnClickListener {
-            val inputText = binding.palindromeEditText.text.toString().toLowerCase()
+            val inputText = binding.palindromeEditText.text.toString().toLowerCase(Locale.ROOT)
             if (TextUtils.isEmpty(inputText)) {
                 Toast.makeText(
                     this@FirstScreen,
@@ -121,7 +122,7 @@ class FirstScreen : AppCompatActivity() {
         }
     }
 
-    private fun setupnameEditText() {
+    private fun setupNameEditText() {
         binding.nameEditText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.nameEditTextLayout.hint = ""
@@ -133,7 +134,7 @@ class FirstScreen : AppCompatActivity() {
         }
     }
 
-    private fun setuppalindromeEditText() {
+    private fun setupPalindromeEditText() {
         binding.palindromeEditText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 binding.palindromeEditTextLayout.hint = ""

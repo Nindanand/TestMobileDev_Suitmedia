@@ -2,7 +2,6 @@ package com.example.userapplication.thirdScreen
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -64,17 +63,6 @@ class ThirdScreen : AppCompatActivity() {
             })
         }
 
-        viewModel.listUsers.observe(this) { listUser ->
-            listUser?.let {
-                if (it.isNotEmpty()) {
-                    adapter.setListUser(it)
-                } else {
-                    Toast.makeText(this@ThirdScreen, "No data available", Toast.LENGTH_SHORT).show()
-                }
-                showLoading(false)
-            }
-        }
-
         adapter.setOnItemClickCallback(object : UserAdapter.OnItemClickCallback {
             override fun onItemClicked(user: DataItem) {
 
@@ -93,17 +81,19 @@ class ThirdScreen : AppCompatActivity() {
         })
 
         viewModel.getAllUsers()
+        vmObserver()
     }
 
 
-
-    private fun showLoading(isLoading: Boolean) {
-        this.isLoading = isLoading
-        if (isLoading) {
-            binding.progressBar.visibility = View.VISIBLE
-        } else {
-            binding.progressBar.visibility = View.GONE
-            swipeRefreshLayout.isRefreshing = false
+    private fun vmObserver() {
+        viewModel.listUsers.observe(this) { listUser ->
+            listUser?.let {
+                if (it.isNotEmpty()) {
+                    adapter.setListUser(it)
+                } else {
+                    Toast.makeText(this@ThirdScreen, "No data available", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }
