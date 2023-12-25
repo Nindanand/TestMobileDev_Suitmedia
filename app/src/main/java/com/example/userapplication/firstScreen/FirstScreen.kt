@@ -23,14 +23,11 @@ class FirstScreen : AppCompatActivity() {
     private lateinit var binding: ActivityFirstScreenBinding
     private var isPalindrome:Boolean = false
     private var currentImageUri: Uri? = null
-    private lateinit var viewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFirstScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
         setupView()
         nextAction()
@@ -38,7 +35,7 @@ class FirstScreen : AppCompatActivity() {
         setupNameEditText()
         setupPalindromeEditText()
         binding.ivUser.setOnClickListener { startGallery() }
-    }
+    }   
 
     private fun setupView() {
         @Suppress("DEPRECATION")
@@ -81,7 +78,7 @@ class FirstScreen : AppCompatActivity() {
                 ).show()
             } else {
                 if (checkPalindrome(palindrome)) {
-                    viewModel.setName(name)
+                    saveNameToSharedPreferences(name)
                     startActivity(Intent(this, SecondScreen::class.java))
                     Log.d("FirstScreen", "Name before setting in ViewModel: $name")
                 } else {
@@ -148,5 +145,12 @@ class FirstScreen : AppCompatActivity() {
     fun checkPalindrome(text: String): Boolean {
         val cleanedText = text.replace("[^a-zA-Z0-9]".toRegex(), "")
         return cleanedText == cleanedText.reversed()
+    }
+
+    private fun saveNameToSharedPreferences(name: String) {
+        val sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putString("name", name)
+        editor.apply()
     }
 }
