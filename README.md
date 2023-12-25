@@ -10,7 +10,7 @@ Aplikasi Android sederhana dengan beberapa fitur seperti pengambilan foto, penge
 
 ## Cara Memulai
 
-1. Clone repositori dengan perintah $ git clone
+1. Clone repositori dengan perintah `git clone`
 2. Jalankan proyek di emulator atau perangkat Android.
 3. Ikuti langkah-langkah dalam aplikasi untuk menggunakan fitur-fitur yang ada.
 
